@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Girasol Realista</title>
+  <style>
+    body {
+      background-color: black;
+      margin: 0;
+    }
+    canvas {
+      display: block;
+      margin: auto;
+    }
+  </style>
+</head>
+<body>
+<canvas id="girasol" width="800" height="800" style="background-color: black;"></canvas>
+
+<script>
+const canvas = document.getElementById('girasol');
+const ctx = canvas.getContext('2d');
+ctx.translate(400, 400); // Centro del canvas
+
+let angle = 0;
+let petalCount = 60;
+let petalStep = 0;
+
+// 🌼 Función para dibujar un pétalo (forma de óvalo)
+function drawPetal(angle) {
+  ctx.save();
+  ctx.rotate(angle);
+  ctx.beginPath();
+  ctx.fillStyle = '#FFA216';
+  ctx.ellipse(0, -120, 20, 50, 0, 0, Math.PI * 2); // más pegado al centro
+  ctx.fill();
+  ctx.restore();
+}
+
+// 🌼 Animar los pétalos girando alrededor del centro
+function animatePetals() {
+  if (petalStep < petalCount) {
+    let a = (2 * Math.PI / petalCount) * petalStep;
+    drawPetal(a);
+    petalStep++;
+    requestAnimationFrame(animatePetals);
+  } else {
+    animateCenter();
+  }
+}
+
+// 🌻 Centro del girasol con espiral
+let k = 0;
+function animateCenter() {
+  if (k < 300) {
+    const goldenAngle = 137.5 * Math.PI / 180;
+    const r = 3 * Math.sqrt(k);
+    const theta = k * goldenAngle;
+    const x = r * Math.cos(theta);
+    const y = r * Math.sin(theta);
+
+    ctx.beginPath();
+    ctx.fillStyle = '#884513';
+    ctx.arc(x, y, 22, 0, Math.PI * 2);
+    ctx.fill();
+
+    k++;
+    requestAnimationFrame(animateCenter);
+  }
+}
+
+animatePetals();
+</script>
+</body>
+</html>
